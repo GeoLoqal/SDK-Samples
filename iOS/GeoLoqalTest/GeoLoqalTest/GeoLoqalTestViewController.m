@@ -3,17 +3,16 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "GeoLoqalTestViewController.h"
 #import "GLLocationManager.h"
-#import "PointsOnMap.h"
-#import "LineOnMap.h"
 #import <QuartzCore/QuartzCore.h>
-#import "GLConfig.h"
 
 @implementation GeoLoqalTestViewController
+
+@synthesize _locationCordinate;
 
 - (void)didReceiveMemoryWarning
 {
@@ -24,221 +23,263 @@
 #pragma mark - View lifecycle
 
 NSMutableArray *_testCaseNameArr;
-NSMutableArray *_testCaseTypeArr;
+
 NSMutableArray *_triggerNameArr;
 UIPickerView *_pickerViewTestCase ;
 UIPickerView *_pickerViewTrigger ;
-UIButton *_showMapBtn;
-UIButton *_showLineMapBtn;
+
 UIButton *_showTestCaseBtn;
 UIButton *_showTriggerBtn;
-UIButton *_showPointBtn;
-UIButton *_showNextLineMapBtn;
-UIButton *_showCheckedTriggerBtn;
+
 NSString *_selectTestCase;
 NSString *_selectedTrigger;
+NSString *_selectedTestCase;
+NSString *_selectTrigger;
+
 GLLocationManager *_glLocationManager;
 CLLocationCoordinate2D _location;
 NSString *_triggerStatus;
+UIButton *_startTestBtn;
 
-NSMutableArray *_latArr;
-NSMutableArray *_lonArr;
-NSMutableArray *_latNextArr;
-NSMutableArray *_lonNextArr;
+MKMapView *_mapView;
+
+CLLocationCoordinate2D coordinate;
+CLLocation *location;
+
+UIActionSheet *actionSheetTestCase;
+UIActionSheet *actionSheetTrigger;
+
+UIActivityIndicatorView *_searchActivity;;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    self.title = @"Geoloqal Test";
+    self.title = @"GeoLoqal Test";
+    
+    _glLocationManager = [[GLLocationManager alloc] init];
+    _glLocationManager.speed = 100;
+    _glLocationManager.outputType = @"json";
+    _glLocationManager.delegate = self;
+
+    _testCaseNameArr = [[NSMutableArray alloc]init];
+    
+    _mapView = [[MKMapView alloc]initWithFrame:CGRectMake(0, 0, 320, 385)];
+    _mapView.delegate = self;
+    _mapView.zoomEnabled = YES;
+    _mapView.scrollEnabled = YES;
+    _mapView.mapType = MKMapTypeStandard;
+    _mapView.showsUserLocation = YES;
+    [self.view addSubview:_mapView];
+    
+    CLLocationManager *_locationManager = [[CLLocationManager alloc]init];
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest; 
+    _locationManager.distanceFilter = 50.0;
+    _locationManager.delegate = self;
+    [_locationManager startUpdatingLocation];
+    
+    location = [_locationManager location];
+    coordinate = [location coordinate];
+    
+    NSLog(@"_ current location %f--%f",coordinate.latitude,coordinate.longitude);
+    
+    MKCoordinateRegion region;
+    MKCoordinateSpan span;
+    span.latitudeDelta=0.2;
+    span.longitudeDelta=0.2;
+    region.span=span;
+    region.center=coordinate;
+    [_mapView setRegion:region animated:TRUE];
+    [_mapView regionThatFits:region];
     
     _showTestCaseBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showTestCaseBtn.frame = CGRectMake(10, 20,130, 30);
+    _showTestCaseBtn.frame = CGRectMake(2, 384,100, 30);
     _showTestCaseBtn.layer.cornerRadius = 6.0f;
-    [_showTestCaseBtn setTitle:@"Show TestCases" forState:UIControlStateNormal];
+    [_showTestCaseBtn setTitle:@"TestCases" forState:UIControlStateNormal];
     _showTestCaseBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [_showTestCaseBtn addTarget:self action:@selector(showPointBtnPressed) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_showTestCaseBtn];
     
     _showTriggerBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     _showTriggerBtn.layer.cornerRadius = 6.0f;
-    _showTriggerBtn.frame = CGRectMake(180, 20, 130, 30);
-    [_showTriggerBtn setTitle:@"Show Triggers" forState:UIControlStateNormal];
+    _showTriggerBtn.frame = CGRectMake(110, 384, 100, 30);
+    [_showTriggerBtn setTitle:@"GeoTargeting" forState:UIControlStateNormal];
     _showTriggerBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [_showTriggerBtn addTarget:self action:@selector(showTriggerPressed) forControlEvents:UIControlEventTouchDown];
-    _showTriggerBtn.hidden = YES;
     [self.view addSubview:_showTriggerBtn];
+    
+    _startTestBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    _startTestBtn.layer.cornerRadius = 6.0f;
+    _startTestBtn.frame = CGRectMake(218, 384, 100, 30);
+    [_startTestBtn setTitle:@"Start Test" forState:UIControlStateNormal];
+    _startTestBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+    [_startTestBtn addTarget:self action:@selector(startTestPressed) forControlEvents:UIControlEventTouchDown];
+    _startTestBtn.enabled = NO;
+    [self.view addSubview:_startTestBtn];
+
+}
+-(void)createTestCaseAlert{
+    
+    actionSheetTestCase = [[UIActionSheet alloc]initWithTitle:@"" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
+    [actionSheetTestCase showInView:self.view];
+    [actionSheetTestCase setBounds:CGRectMake(0, 0, 320, 470.0)];
     
     _pickerViewTestCase = [[UIPickerView alloc] init];
     _pickerViewTestCase.showsSelectionIndicator = YES;
-    _pickerViewTestCase.frame=CGRectMake(0, 75, self.view.bounds.size.width/2, 190);
-    _pickerViewTestCase.hidden = YES;
+    _pickerViewTestCase.frame=CGRectMake(0, 44, 320,250);
     _pickerViewTestCase.tag = 1;
-    [self.view addSubview:_pickerViewTestCase];
+    _pickerViewTestCase.delegate = self;
+    
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    pickerToolbar.backgroundColor = [UIColor redColor];
+    pickerToolbar.barStyle = UIBarStyleBlack;
+    [pickerToolbar sizeToFit];
+    
+    NSMutableArray *barItems = [[NSMutableArray alloc] init];
+    
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    [barItems addObject:flexSpace];
+    
+    UIBarButtonItem *btnBarSaveTestCase = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(btnBarSaveTestCaseClicked)];
+    
+    UIBarButtonItem *btnBarCancelTestCase = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(btnBarCancelClicked)];
+    [barItems addObject:btnBarSaveTestCase];
+    [barItems addObject:btnBarCancelTestCase];
+    
+    [pickerToolbar setItems:barItems animated:YES];
+    
+    [actionSheetTestCase addSubview:pickerToolbar];
+    [actionSheetTestCase addSubview:_pickerViewTestCase];
+}
+-(void)createTriggerAlert{
+    
+    actionSheetTrigger = [[UIActionSheet alloc]initWithTitle:@"" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
+    [actionSheetTrigger showInView:self.view];
+    [actionSheetTrigger setBounds:CGRectMake(0, 0, 320, 470.0)];
     
     _pickerViewTrigger = [[UIPickerView alloc] init];
     _pickerViewTrigger.showsSelectionIndicator = YES;
-    _pickerViewTrigger.frame=CGRectMake(165, 75, self.view.bounds.size.width/2, 190);
-    _pickerViewTrigger.hidden = YES;
+    _pickerViewTrigger.frame=CGRectMake(0, 44, 320,250);
+    _pickerViewTrigger.delegate = self;
     _pickerViewTrigger.tag = 2;
-    [self.view addSubview:_pickerViewTrigger];
-
-    _showPointBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showPointBtn.layer.cornerRadius = 6.0f;
-    _showPointBtn.frame = CGRectMake(10, 280, 130, 30);
-    [_showPointBtn setTitle:@"Show Point" forState:UIControlStateNormal];
-    _showPointBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [_showPointBtn addTarget:self action:@selector(showTestPoint) forControlEvents:UIControlEventTouchDown];
-    _showPointBtn.hidden = YES;
-    //_showPointBtn.userInteractionEnabled = NO;
-    [self.view addSubview:_showPointBtn];
     
-    _showCheckedTriggerBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showCheckedTriggerBtn.frame = CGRectMake(180, 280, 130, 30);
-    _showCheckedTriggerBtn.layer.cornerRadius = 6.0f;
-    [_showCheckedTriggerBtn setTitle:@"Check Triggers" forState:UIControlStateNormal];
-    _showCheckedTriggerBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [_showCheckedTriggerBtn addTarget:self action:@selector(showIsTriggerPoint) forControlEvents:UIControlEventTouchDown];
-    _showCheckedTriggerBtn.hidden = YES;
-    [self.view addSubview:_showCheckedTriggerBtn];
-
-    _showMapBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showMapBtn.layer.cornerRadius = 6.0f;
-    _showMapBtn.frame = CGRectMake(10, 340,  90, 30);
-    [_showMapBtn setTitle:@"Point On Map" forState:UIControlStateNormal];
-    _showMapBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [_showMapBtn addTarget:self action:@selector(showMapBtnPressed) forControlEvents:UIControlEventTouchDown];
-    _showMapBtn.hidden = YES;
-    //_showMapBtn.userInteractionEnabled = NO;
-    [self.view addSubview:_showMapBtn];
+    UIToolbar *pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    pickerToolbar.backgroundColor = [UIColor redColor];
+    pickerToolbar.barStyle = UIBarStyleBlack;
+    [pickerToolbar sizeToFit];
     
-    _showLineMapBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showLineMapBtn.layer.cornerRadius = 6.0f;
-    _showLineMapBtn.frame = CGRectMake(110, 340,  90, 30);
-    [_showLineMapBtn setTitle:@"Line On Map" forState:UIControlStateNormal];
-    _showLineMapBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [_showLineMapBtn addTarget:self action:@selector(showLineMapBtnPressed) forControlEvents:UIControlEventTouchDown];
-    _showLineMapBtn.hidden = YES;
-    //_showMapBtn.userInteractionEnabled = NO;
-    [self.view addSubview:_showLineMapBtn];
+    NSMutableArray *barItems = [[NSMutableArray alloc] init];
     
-    _showNextLineMapBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showNextLineMapBtn.layer.cornerRadius = 6.0f;
-    _showNextLineMapBtn.frame = CGRectMake(210, 340, 100, 30);
-    [_showNextLineMapBtn setTitle:@"NextPointPath" forState:UIControlStateNormal];
-    _showNextLineMapBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-    [_showNextLineMapBtn addTarget:self action:@selector(showNextLineMapBtnPressed) forControlEvents:UIControlEventTouchDown];
-    _showNextLineMapBtn.hidden = YES;
-    //_showMapBtn.userInteractionEnabled = NO;
-    [self.view addSubview:_showNextLineMapBtn];
+    UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    [barItems addObject:flexSpace];
     
-    _glLocationManager = [[GLLocationManager alloc] init];
-    _glLocationManager.speed = 40;
-    _glLocationManager.frequency = 5;
-    _glLocationManager.delegate = self;
+    UIBarButtonItem *btnBarSaveTrigger = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(btnBarSaveTriggerClicked)];
+    [barItems addObject:btnBarSaveTrigger];
     
-    _latArr = [[NSMutableArray alloc]init];
-    _lonArr = [[NSMutableArray alloc]init];
-    _latNextArr = [[NSMutableArray alloc]init];
-    _lonNextArr = [[NSMutableArray alloc]init];
-    _testCaseNameArr = [[NSMutableArray alloc]init];;
+    UIBarButtonItem *btnBarCancelTrigger = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(btnBarCancelTriggerClicked)];
+    [barItems addObject:btnBarSaveTrigger];
+    [barItems addObject:btnBarCancelTrigger];
+    
+    [pickerToolbar setItems:barItems animated:YES];
+    
+    [actionSheetTrigger addSubview:pickerToolbar];
+    [actionSheetTrigger addSubview:_pickerViewTrigger];
+    
 }
-//delegate methods
--(void)geoPointLatitude :(double)lat longitude:(double)lon{
+-(void)btnBarSaveTestCaseClicked{
+    
+    if (_selectTestCase == nil && _testCaseNameArr != nil && _testCaseNameArr.count>0) {
+        _selectTestCase = [_testCaseNameArr objectAtIndex:0];
+        _selectedTestCase = _selectTestCase;
+        _startTestBtn.enabled = YES;
+    }else{
+        _selectedTestCase = _selectTestCase;
+        _startTestBtn.enabled = YES;
+    }
+    
+    [actionSheetTestCase dismissWithClickedButtonIndex:0 animated:YES];  
+}
+-(void)btnBarCancelClicked{
+    
+    _selectedTestCase = nil;
+    [actionSheetTestCase dismissWithClickedButtonIndex:0 animated:YES];   
+}
+-(void)btnBarSaveTriggerClicked{
+    
+    if (_selectedTrigger == nil && _triggerNameArr.count>0) {
+
+        _selectedTrigger = [_triggerNameArr objectAtIndex:0];
+        _selectTrigger = _selectedTrigger;
+        _startTestBtn.enabled = YES;
+    }else {
+        
+        _selectTrigger = _selectedTrigger;
+        _startTestBtn.enabled = YES;
+    }
+    
+    [actionSheetTrigger dismissWithClickedButtonIndex:0 animated:YES];
+}
+-(void)btnBarCancelTriggerClicked{
+    
+    _selectTrigger = nil;
+    [actionSheetTrigger dismissWithClickedButtonIndex:0 animated:YES]; 
+}
+
+                      /////delegate methods test case////
+
+-(void)testCaseName :(NSMutableArray *)testCasenames{
+    NSLog(@"_testCaseNameArr %d",testCasenames.count); 
+    
+    _testCaseNameArr = [testCasenames mutableCopy];
+    _pickerViewTestCase.delegate = self;
+    _selectTestCase = [_testCaseNameArr objectAtIndex:0];
+    
+}
+-(void)triggerName :(NSMutableArray *)triggerNames{
+    NSLog(@"triggerName %d",triggerNames.count);
+    
+    _triggerNameArr = [triggerNames mutableCopy];
+    _pickerViewTrigger.delegate = self;
+    _selectedTrigger = [_triggerNameArr objectAtIndex:0];
+
+}
+-(void)triggerStatus :(NSString *)triggerStatus{
+    
+    _triggerStatus = triggerStatus; 
+    
+    if ([_triggerStatus isEqualToString:@"true"]) {
+        
+        UIAlertView *_testPointAlert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"Trigger Matched"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [_testPointAlert show];
+    }
+}
+
+-(void)geoLoqalPointLatitude :(double)lat longitude:(double)lon{
     NSLog(@"lat lon%f ==%f",lat,lon);  
     _location.latitude = lat;
     _location.longitude = lon;
-//    _showPointBtn.userInteractionEnabled = YES;
-//    _showMapBtn.userInteractionEnabled = YES;
-    [_glLocationManager createInsideCircleTrigger:@"demoCircle" lat:[NSString stringWithFormat:@"%f",lat] lon:[NSString stringWithFormat:@"%f",lon] rad:20];
-}
--(void)byAddressLatitude :(double)lat longitude:(double)lon{
-    NSLog(@"latlonDirection%f ==%f",lat,lon);
-    if(lat != 0.0){
-        _location.latitude = lat;
-        _location.longitude = lon;
-        NSString *_lat = [NSString stringWithFormat:@"%f",lat];
-        NSString *_lon = [NSString stringWithFormat:@"%f",lon];
-        
-        [_latArr addObject:_lat];
-        [_lonArr addObject:_lon];
+     [self drawPointOnMap];
+    if (_selectTrigger != nil) {
+        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude]]; 
     }
-    
-    
-//    _showPointBtn.userInteractionEnabled = YES;
-//    _showMapBtn.userInteractionEnabled = YES;
-}
--(void)bySequentialPolylineLatitude :(double)lat longitude:(double)lon{
 
-  if(lat != 0.0){
-        _location.latitude = lat;
-        _location.longitude = lon;
-      [_latNextArr addObject:[NSString stringWithFormat:@"%f",lat]];
-      [_lonNextArr addObject:[NSString stringWithFormat:@"%f",lon]];
-      NSLog(@"latlonNextPoint%f ==%f--count%d",lat,lon,_latNextArr.count);
-    }
-//    if (lat != 0.0) {
-//        _showPointBtn.userInteractionEnabled = YES;
-//        _showMapBtn.userInteractionEnabled = YES;
-//    }
-    
+//    [_glLocationManager createInsideCircleTrigger:@"demoCircle" lat:[NSString stringWithFormat:@"%f",lat] lon:[NSString stringWithFormat:@"%f",lon] rad:20];
 }
+            ////////end all delegate Imaplementation/////////
+        
 -(void)showPointBtnPressed
 {
+    [self createTestCaseAlert];
     [_glLocationManager getTestCaseNames];
     
 }
 -(void)showTriggerPressed{
+    
+    [self createTriggerAlert];
     [_glLocationManager getTriggerNames];
+    
 }
--(void)showTestPoint{
-    UIAlertView *_testPointAlert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"Latitude:= %f\nLongitude:= %f",_location.latitude,_location.longitude] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-    [_testPointAlert show];
-}
--(void)showIsTriggerPoint{
-    NSLog(@"Trigger status %@",_triggerStatus);
-    if ([_triggerStatus isEqualToString:@"true"]) {
-        UIAlertView *_testPointAlert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"Point Matches in Trigger"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [_testPointAlert show];
 
-    }else if([_triggerStatus isEqualToString:@"false"]){
-        UIAlertView *_testPointAlert = [[UIAlertView alloc]initWithTitle:nil message:[NSString stringWithFormat:@"Point doesn't Matches in Trigger"] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [_testPointAlert show];
-    }
-}
-//delegate method test case
--(void)testCaseName :(NSMutableArray *)testCasenames{
-    NSLog(@"_testCaseNameArr %d",testCasenames.count); 
-    
-    _pickerViewTestCase.hidden = NO;
-    _testCaseNameArr = [testCasenames mutableCopy];
-    _pickerViewTestCase.delegate = self;
-    _selectTestCase = [_testCaseNameArr objectAtIndex:0];
-    if (_selectTestCase != nil) {
-        
-        [_glLocationManager registrationWithApiKey:GL_APIKey andTestCase:_selectTestCase];
-    }
-    _showTriggerBtn.hidden = NO;
-    _showPointBtn.hidden = NO;
-    _showMapBtn.hidden = NO;
-    _showLineMapBtn.hidden = NO;
-    _showNextLineMapBtn.hidden = NO;
-}
--(void)triggerName :(NSMutableArray *)triggerNames{
-    NSLog(@"triggerName %d",triggerNames.count);
-    _pickerViewTrigger.hidden = NO;
-    _showCheckedTriggerBtn.hidden = NO;
-    _triggerNameArr = [triggerNames mutableCopy];
-    _pickerViewTrigger.delegate = self;
-    _selectedTrigger = [_triggerNameArr objectAtIndex:0];
-    if (_selectedTrigger != nil) {
-        [_glLocationManager getCheckedGeoTrigger:_selectedTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude]]; 
-    }
-    
-}
--(void)triggerStatus :(NSString *)triggerStatus{
-    _triggerStatus = triggerStatus; 
-}
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView;
 {
     return 1;
@@ -248,25 +289,13 @@ NSMutableArray *_lonNextArr;
 {
     if (pickerView.tag == 1) {
         NSLog(@"row %d",row);
-        NSString *_selectedTestCase;
-        _selectedTestCase =  [_testCaseNameArr objectAtIndex:row];
-        NSLog(@"_selectTestCase %@",_selectedTestCase);
-        if (_selectedTestCase != nil) {
-            [_glLocationManager registrationWithApiKey:GL_APIKey andTestCase:_selectedTestCase];
-        }
-        
+        _selectTestCase =  [_testCaseNameArr objectAtIndex:row];        
     }else if(pickerView.tag == 2){
         
         _selectedTrigger =  [_triggerNameArr objectAtIndex:row];
         NSLog(@"_selectedTrigger %@",_selectedTrigger);
-        _showCheckedTriggerBtn.userInteractionEnabled = YES;
-        if (_selectedTrigger != nil) {
-            [_glLocationManager getCheckedGeoTrigger:_selectedTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude] ]; 
-        }
-        
     }
 }
-
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component;
 {
     if (pickerView.tag == 1) {
@@ -299,38 +328,47 @@ NSMutableArray *_lonNextArr;
     }
     return nil;
 }
--(void)showMapBtnPressed{
+-(void)startTestPressed{
     
-    PointsOnMap *_pointsOnMap = [[PointsOnMap alloc]init];
-    if (_location.latitude != 0.0) {
-        _pointsOnMap._locationCordinate = _location;
-        [self.navigationController pushViewController:_pointsOnMap animated:YES];
+    if (_selectedTestCase != nil) {
+        NSLog(@"startTestPressed %@",_selectedTestCase);
+        [_glLocationManager registrationWithTestCase:_selectedTestCase];
+        _startTestBtn.hidden = NO;
+    }else{
+        
+        if (_selectedTrigger != nil) {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"You have to associate a test case with this trigger" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+        }
+        
     }
-    
+
 }
--(void)showLineMapBtnPressed{
-    NSLog(@"showLineMapBtnPressed");
-    LineOnMap *_lineOnMap = [[LineOnMap alloc]init];
-    if (_latArr.count != 0 || _latArr != nil) {
-        NSLog(@"showLineMapBtnPressed");
-        _lineOnMap._latArray = [_latArr mutableCopy]; 
-        _lineOnMap._lonArray = [_lonArr mutableCopy];
-        [self.navigationController pushViewController:_lineOnMap animated:YES];
-    }
-    [_latArr removeAllObjects];
-    [_lonArr removeAllObjects];
+-(void)drawPointOnMap{
+        
+    NSLog(@"drawPointOnMap _location.latitude %f",_location.latitude);
+    CLLocationCoordinate2D coords;
+    coords.latitude = _location.latitude;
+    coords.longitude = _location.longitude;
     
-}
--(void)showNextLineMapBtnPressed{
-    LineOnMap *_lineOnMap = [[LineOnMap alloc]init];
-    if (_latNextArr.count != 0 || _latNextArr != nil) {
-        NSLog(@"showNextLineMapBtnPressed");
-        _lineOnMap._latArray = [_latNextArr mutableCopy]; 
-        _lineOnMap._lonArray = [_lonNextArr mutableCopy];
-        [self.navigationController pushViewController:_lineOnMap animated:YES];
+    //_mapView.centerCoordinate = coords;
+    [_mapView setCenterCoordinate:coords animated:YES];
+    
+    if (_mapView.annotations.count > 0) {
+        [_mapView removeAnnotation:[_mapView.annotations objectAtIndex:0]];
     }
-    [_latNextArr removeAllObjects];
-    [_lonNextArr removeAllObjects];
+    MKPointAnnotation *_pointAnnotation = [[MKPointAnnotation alloc]init];
+    _pointAnnotation.coordinate = coords;
+    [_mapView addAnnotation:_pointAnnotation];
+}
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation{
+
+    
+    MKAnnotationView *pinView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"pin"];
+    pinView.canShowCallout = YES;
+    UIImage *_image = [UIImage imageNamed:@"geoloqallogo.png"];
+    pinView.image = _image;
+    pinView.centerOffset = CGPointMake(0.0, -_image.size.height/2);
+        return pinView;
 }
 - (void)viewDidUnload
 {
@@ -338,7 +376,6 @@ NSMutableArray *_lonNextArr;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

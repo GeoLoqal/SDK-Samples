@@ -9,14 +9,9 @@
 /* Begin PBXBuildFile section */
 		03616A291665E9B100A873D3 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 03616A281665E9B100A873D3 /* default.png */; };
 		03616A2B1665EBD000A873D3 /* geoloqal_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 03616A2A1665EBD000A873D3 /* geoloqal_icon.png */; };
-		03616A6F1666335900A873D3 /* libGeoLoqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03616A6E1666335900A873D3 /* libGeoLoqal.a */; };
-		03A88E2A16413C540011E627 /* PointsOnMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A88E2816413C540011E627 /* PointsOnMap.m */; };
-		03A88E2B16413C540011E627 /* PointsOnMap.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03A88E2916413C540011E627 /* PointsOnMap.xib */; };
+		0397314E16761A6900EEB0F8 /* libGeoLoqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0397314D16761A6900EEB0F8 /* libGeoLoqal.a */; };
 		03A88E32164144070011E627 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A88E31164144070011E627 /* MapKit.framework */; };
-		03D9495B1647CC4D00E23C66 /* LineOnMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D949591647CC4D00E23C66 /* LineOnMap.m */; };
-		03D9495C1647CC4D00E23C66 /* LineOnMap.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03D9495A1647CC4D00E23C66 /* LineOnMap.xib */; };
-		03F0632C164A0C9E00B3FF5C /* NVPolylineAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F06329164A0C9E00B3FF5C /* NVPolylineAnnotation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		03F0632D164A0C9E00B3FF5C /* NVPolylineAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F0632B164A0C9E00B3FF5C /* NVPolylineAnnotationView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		03DB3B701670961E007AE2E0 /* geoloqallogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB3B6F1670961E007AE2E0 /* geoloqallogo.png */; };
 		CEB771DD164001DE00CE49D4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771DC164001DE00CE49D4 /* UIKit.framework */; };
 		CEB771DF164001DE00CE49D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771DE164001DE00CE49D4 /* Foundation.framework */; };
 		CEB771E1164001DE00CE49D4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771E0164001DE00CE49D4 /* CoreGraphics.framework */; };
@@ -31,20 +26,10 @@
 /* Begin PBXFileReference section */
 		03616A281665E9B100A873D3 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		03616A2A1665EBD000A873D3 /* geoloqal_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqal_icon.png; sourceTree = "<group>"; };
-		03616A331665F53F00A873D3 /* GLConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLConfig.h; sourceTree = "<group>"; };
-		03616A6916662A2B00A873D3 /* GLLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLocationManager.h; sourceTree = "<group>"; };
-		03616A6E1666335900A873D3 /* libGeoLoqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGeoLoqal.a; sourceTree = "<group>"; };
-		03A88E2716413C540011E627 /* PointsOnMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointsOnMap.h; sourceTree = "<group>"; };
-		03A88E2816413C540011E627 /* PointsOnMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PointsOnMap.m; sourceTree = "<group>"; };
-		03A88E2916413C540011E627 /* PointsOnMap.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PointsOnMap.xib; sourceTree = "<group>"; };
+		0397311C1675F72C00EEB0F8 /* GLLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLocationManager.h; sourceTree = "<group>"; };
+		0397314D16761A6900EEB0F8 /* libGeoLoqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGeoLoqal.a; sourceTree = "<group>"; };
 		03A88E31164144070011E627 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		03D949581647CC4D00E23C66 /* LineOnMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineOnMap.h; sourceTree = "<group>"; };
-		03D949591647CC4D00E23C66 /* LineOnMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineOnMap.m; sourceTree = "<group>"; };
-		03D9495A1647CC4D00E23C66 /* LineOnMap.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LineOnMap.xib; sourceTree = "<group>"; };
-		03F06328164A0C9E00B3FF5C /* NVPolylineAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NVPolylineAnnotation.h; sourceTree = "<group>"; };
-		03F06329164A0C9E00B3FF5C /* NVPolylineAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NVPolylineAnnotation.m; sourceTree = "<group>"; };
-		03F0632A164A0C9E00B3FF5C /* NVPolylineAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NVPolylineAnnotationView.h; sourceTree = "<group>"; };
-		03F0632B164A0C9E00B3FF5C /* NVPolylineAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NVPolylineAnnotationView.m; sourceTree = "<group>"; };
+		03DB3B6F1670961E007AE2E0 /* geoloqallogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqallogo.png; sourceTree = "<group>"; };
 		CEB771D8164001DE00CE49D4 /* GeoLoqalTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoLoqalTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEB771DC164001DE00CE49D4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CEB771DE164001DE00CE49D4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -58,7 +43,6 @@
 		CEB771EE164001DE00CE49D4 /* GeoLoqalTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoLoqalTestViewController.h; sourceTree = "<group>"; };
 		CEB771EF164001DE00CE49D4 /* GeoLoqalTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLoqalTestViewController.m; sourceTree = "<group>"; };
 		CEB771F2164001DE00CE49D4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GeoLoqalTestViewController.xib; sourceTree = "<group>"; };
-		CEB771FD1640020B00CE49D4 /* GeoLoqal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeoLoqal.h; sourceTree = "<group>"; };
 		CEB771FE1640022000CE49D4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -72,24 +56,13 @@
 				CEB771DD164001DE00CE49D4 /* UIKit.framework in Frameworks */,
 				CEB771DF164001DE00CE49D4 /* Foundation.framework in Frameworks */,
 				CEB771E1164001DE00CE49D4 /* CoreGraphics.framework in Frameworks */,
-				03616A6F1666335900A873D3 /* libGeoLoqal.a in Frameworks */,
+				0397314E16761A6900EEB0F8 /* libGeoLoqal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03F06326164A0C8000B3FF5C /* PathDraw */ = {
-			isa = PBXGroup;
-			children = (
-				03F06328164A0C9E00B3FF5C /* NVPolylineAnnotation.h */,
-				03F06329164A0C9E00B3FF5C /* NVPolylineAnnotation.m */,
-				03F0632A164A0C9E00B3FF5C /* NVPolylineAnnotationView.h */,
-				03F0632B164A0C9E00B3FF5C /* NVPolylineAnnotationView.m */,
-			);
-			name = PathDraw;
-			sourceTree = "<group>";
-		};
 		CEB771CD164001DE00CE49D4 = {
 			isa = PBXGroup;
 			children = (
@@ -122,15 +95,8 @@
 		CEB771E2164001DE00CE49D4 /* GeoLoqalTest */ = {
 			isa = PBXGroup;
 			children = (
-				03F06326164A0C8000B3FF5C /* PathDraw */,
-				03D949581647CC4D00E23C66 /* LineOnMap.h */,
-				03D949591647CC4D00E23C66 /* LineOnMap.m */,
-				03D9495A1647CC4D00E23C66 /* LineOnMap.xib */,
-				03A88E2716413C540011E627 /* PointsOnMap.h */,
-				03A88E2816413C540011E627 /* PointsOnMap.m */,
-				03A88E2916413C540011E627 /* PointsOnMap.xib */,
+				03DB3B6F1670961E007AE2E0 /* geoloqallogo.png */,
 				CEB771FB164001F200CE49D4 /* GeoLoqal SDK */,
-				03616A331665F53F00A873D3 /* GLConfig.h */,
 				CEB771EB164001DE00CE49D4 /* GeoLoqalTestAppDelegate.h */,
 				CEB771EC164001DE00CE49D4 /* GeoLoqalTestAppDelegate.m */,
 				CEB771EE164001DE00CE49D4 /* GeoLoqalTestViewController.h */,
@@ -157,9 +123,8 @@
 		CEB771FB164001F200CE49D4 /* GeoLoqal SDK */ = {
 			isa = PBXGroup;
 			children = (
-				03616A6E1666335900A873D3 /* libGeoLoqal.a */,
-				03616A6916662A2B00A873D3 /* GLLocationManager.h */,
-				CEB771FD1640020B00CE49D4 /* GeoLoqal.h */,
+				0397314D16761A6900EEB0F8 /* libGeoLoqal.a */,
+				0397311C1675F72C00EEB0F8 /* GLLocationManager.h */,
 			);
 			name = "GeoLoqal SDK";
 			sourceTree = "<group>";
@@ -216,10 +181,9 @@
 			files = (
 				CEB771E7164001DE00CE49D4 /* InfoPlist.strings in Resources */,
 				CEB771F3164001DE00CE49D4 /* GeoLoqalTestViewController.xib in Resources */,
-				03A88E2B16413C540011E627 /* PointsOnMap.xib in Resources */,
-				03D9495C1647CC4D00E23C66 /* LineOnMap.xib in Resources */,
 				03616A291665E9B100A873D3 /* default.png in Resources */,
 				03616A2B1665EBD000A873D3 /* geoloqal_icon.png in Resources */,
+				03DB3B701670961E007AE2E0 /* geoloqallogo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,10 +197,6 @@
 				CEB771E9164001DE00CE49D4 /* main.m in Sources */,
 				CEB771ED164001DE00CE49D4 /* GeoLoqalTestAppDelegate.m in Sources */,
 				CEB771F0164001DE00CE49D4 /* GeoLoqalTestViewController.m in Sources */,
-				03A88E2A16413C540011E627 /* PointsOnMap.m in Sources */,
-				03D9495B1647CC4D00E23C66 /* LineOnMap.m in Sources */,
-				03F0632C164A0C9E00B3FF5C /* NVPolylineAnnotation.m in Sources */,
-				03F0632D164A0C9E00B3FF5C /* NVPolylineAnnotationView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

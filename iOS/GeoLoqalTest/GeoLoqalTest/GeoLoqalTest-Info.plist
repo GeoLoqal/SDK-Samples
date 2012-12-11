@@ -15,7 +15,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>geoloqal.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>cobi.${PRODUCT_NAME:rfc1034identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

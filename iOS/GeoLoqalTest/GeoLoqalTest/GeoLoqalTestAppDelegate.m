@@ -3,7 +3,7 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "GeoLoqalTestAppDelegate.h"
@@ -19,7 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    sleep(2);
+    sleep(1);
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
@@ -28,9 +28,8 @@
     self.window.rootViewController = _nav;
     [self.window makeKeyAndVisible];
     
-    //To generate the application api key login to dev.geoloqal.com
-    
-    [GLLocationManager setApiKey:@"INSERT YOUR API KEY"];
+            //set API key here
+    [GLLocationManager setApiKey:@"INSERT YOUR API KEY HERE"];
     return YES;
 }
 
