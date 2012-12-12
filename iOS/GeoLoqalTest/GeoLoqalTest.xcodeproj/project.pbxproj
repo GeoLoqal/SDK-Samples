@@ -273,12 +273,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GeoLoqalTest/GeoLoqalTest-Prefix.pch";
 				INFOPLIST_FILE = "GeoLoqalTest/GeoLoqalTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GeoLoqalTest\"",
-					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products/Release-iphoneos\"",
-					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products\"",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -291,12 +291,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GeoLoqalTest/GeoLoqalTest-Prefix.pch";
 				INFOPLIST_FILE = "GeoLoqalTest/GeoLoqalTest-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GeoLoqalTest\"",
-					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products/Release-iphoneos\"",
-					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products\"",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
