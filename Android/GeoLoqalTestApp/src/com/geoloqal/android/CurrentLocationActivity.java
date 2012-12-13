@@ -113,7 +113,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 		 mapController.setZoom(15);
 		 
 		 _locationManager = new GLLocationManager(CurrentLocationActivity.this);
-	     _locationManager.setApiKey("INSERT YOUR API KEY HERE");
+	     _locationManager.setApiKey("INSERT YOUR API KEY);
 	     _locationManager.setUnit("kph");
 	     _locationManager.setOutPutType("json");
 	     _locationManager.setSpeed(speed);
@@ -211,12 +211,9 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
    			   if(testCaseName != null && triggerName == null){
    				   
    				location = _locationManager.registration(testCaseName);
-   				
-   				if(location != null){
    					
    					showPointsonMap(location);
    	   			    nextPointCount++;
-   				}
     			   
    			    
    			   }
@@ -228,7 +225,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
    				   
    				     location = _locationManager.registration(testCaseName);
    				     
-   				     if(location != null){
+   				     
    				    	 
    				    	showPointsonMap(location);
         			     nextPointCount++;
@@ -240,7 +237,6 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
       			    		showDialog("Trigger Matched");
       			    	}
    				    	 
-   				     }
    				     
    			    	
    			    }
@@ -418,12 +414,8 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 		_setButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
-//				if((int) getWheel(R.id.optionswheel).getCurrentItem() != 0){
 					
-					testCaseName = showallTestcases[(int) getWheel(R.id.optionswheel).getCurrentItem()];
-//				}
-				
+				testCaseName = showallTestcases[(int) getWheel(R.id.optionswheel).getCurrentItem()];
 				dialog.dismiss();
 			}
 		});
@@ -448,11 +440,8 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 		_setButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				if((int) getWheel(R.id.optionswheel).getCurrentItem() != 0){
 					
-					triggerName = showallTriggers[(int) getWheel(R.id.optionswheel).getCurrentItem()]; 
-//				}
-				
+				triggerName = showallTriggers[(int) getWheel(R.id.optionswheel).getCurrentItem()]; 
 				dialog.dismiss();
 			}
 		});

@@ -48,7 +48,7 @@
 						android:enabled="true"
 						android:clickable="true"
 						android:id="@+id/theMap" 
-						android:apiKey="0fVaYMJNAW1oeg3Wg6RxGd_gDBOeE7Cdx9vSl8A" > 
+						android:apiKey="0zhRsE-5EPSdw727NoJtYg_jfDMWyBz5guJXj6w" > 
 
 	           </com.google.android.maps.MapView>       
 	       </FrameLayout>   
