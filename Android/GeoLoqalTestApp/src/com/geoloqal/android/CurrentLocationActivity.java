@@ -113,7 +113,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 		 mapController.setZoom(15);
 		 
 		 _locationManager = new GLLocationManager(CurrentLocationActivity.this);
-	     _locationManager.setApiKey("INSERT YOUR API KEY);
+	     _locationManager.setApiKey("INSERT YOUR API KEY");
 	     _locationManager.setUnit("kph");
 	     _locationManager.setOutPutType("json");
 	     _locationManager.setSpeed(speed);
