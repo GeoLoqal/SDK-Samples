@@ -7,7 +7,10 @@ import org.json.JSONArray;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,7 +19,10 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -28,16 +34,15 @@ import com.android.wheelpicker.ArrayWheelAdapter;
 import com.android.wheelpicker.OnWheelChangedListener;
 import com.android.wheelpicker.OnWheelScrollListener;
 import com.android.wheelpicker.WheelView;
-import com.geoloqal.com.GLLocationManager;
-import com.geoloqal.com.data.GLLocation;
-import com.geoloqal.com.data.TriggerData;
+import com.geoloqal.android.data.GLLocation;
+import com.geoloqal.android.data.TriggerData;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
-public class CurrentLocationActivity extends MapActivity implements LocationListener{
+public class CurrentLocationActivity extends MapActivity{
 	
 	private GLLocationManager _locationManager = null;
 	private MapView _mapView =null;
@@ -60,6 +65,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 	private String triggerName =null;
 	private String showallTestcases[]=null;
 	private String showallTriggers[]=null;
+	private String provider = null;
 	
 	private static final int speed=10;
 	
@@ -67,11 +73,14 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 	private double _latitude;
 	private double _longitude;
 	
-	private GLLocation location = null;
+	private GLLocation glLocation = null;
+	private Location location = null;
 	
 	private static int nextPointCount = 0;
 	
 	private Dialog dialog = null;
+	
+	BatteryReceiver _receiver;
 	
 	
 	@Override
@@ -81,6 +90,8 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.location_service);
 			getComponent();
+			getBatteryLevel();
+			
 		
 	}
 	
@@ -113,14 +124,11 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 		 mapController.setZoom(15);
 		 
 		 _locationManager = new GLLocationManager(CurrentLocationActivity.this);
-	     _locationManager.setApiKey("INSERT YOUR API KEY");
+	     _locationManager.setApiKey("INSERT YOUR API KEY HERE");
 	     _locationManager.setUnit("kph");
 	     _locationManager.setOutPutType("json");
 	     _locationManager.setSpeed(speed);
-
-         
-        _locationocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        _locationocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 100, this);
+       
          getCurrentLocation();
         _geoPoint =new GeoPoint((int) (_latitude * 1E6),(int) (_longitude * 1E6));
          mapController.setCenter(_geoPoint);
@@ -128,7 +136,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
          MapOverlay mapOverlay = new MapOverlay();
          List<Overlay> listOfOverlays = _mapView.getOverlays();
          listOfOverlays.clear();
-         listOfOverlays.add(mapOverlay);  
+         listOfOverlays.add(mapOverlay);
 	}
 	
 	private void showPointsonMap(GLLocation location){
@@ -151,25 +159,69 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 	}
 	private void getCurrentLocation() {
 		
-    	Location location =	_locationocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		long minTime = 2*60*1000;
+		float minDistance = 10;
+		Location prevLoc= null;
+		Location newLoc= null;
+		
+		 _locationocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		 MyLocationListener _listener = new MyLocationListener();
+		  if(_locationocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			 
+			 provider = LocationManager.GPS_PROVIDER;
+		   }
+		  else if(_locationocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+			  
+			  provider = LocationManager.NETWORK_PROVIDER;
+			  
+		  }
+	    _locationocationManager.requestLocationUpdates(provider, minTime, minDistance, _listener);
+		
+	    prevLoc=location;
+    	location =	_locationocationManager.getLastKnownLocation(provider);
+    	newLoc = location;
     	
     	if(location!=null){
     		
     		_latitude=location.getLatitude();
     		_longitude= location.getLongitude();
     		
-			 String message = String.format("Current location \n Latitude: %1$s \n Longitude: %2$s",location.getLatitude(), location.getLongitude());
 	        _geoPoint = new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
 	         mapController.setCenter(_geoPoint);
 	        
 	         MapOverlay mapOverlay = new MapOverlay();
 		     List<Overlay> listOfOverlays = _mapView.getOverlays();
 		     listOfOverlays.clear();
-		     listOfOverlays.add(mapOverlay);  
+		     listOfOverlays.add(mapOverlay);
 		     _mapView.invalidate();
     	}
 
 	}
+	
+  public  void turnGPSOff(){
+		
+		System.out.println("turnGPSOff");
+		
+		try{
+		    String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+		    if(provider.contains("gps")){
+		         final Intent poke = new Intent();
+		         poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider"); 
+		         poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+		         poke.setData(Uri.parse("3")); 
+		         sendBroadcast(poke);
+		      }
+		    
+		    Toast.makeText(CurrentLocationActivity.this, "Your GPS is disebled",Toast.LENGTH_SHORT).show();
+	      }
+	     catch(Exception e)
+	     {
+	      Log.d("Location", " exception thrown in enabling GPS "+e);
+	     }
+
+	}
+	
 	private class ClickListener implements OnClickListener{
 
 		@Override
@@ -194,7 +246,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 				}
 				else{
 					
-					showTestCaseDialog();
+//					showTestCaseDialog();
 					
 				}
 				
@@ -210,9 +262,9 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
    			   
    			   if(testCaseName != null && triggerName == null){
    				   
-   				location = _locationManager.registration(testCaseName);
+   				glLocation = _locationManager.registration(testCaseName);
    					
-   					showPointsonMap(location);
+   					showPointsonMap(glLocation);
    	   			    nextPointCount++;
     			   
    			    
@@ -223,23 +275,19 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 			    }
    			   else if(testCaseName != null && triggerName != null){
    				   
-   				     location = _locationManager.registration(testCaseName);
-   				     
-   				     
+   				glLocation = _locationManager.registration(testCaseName);
    				    	 
-   				    	showPointsonMap(location);
-        			     nextPointCount++;
-      			    	
-      			    	String status = _locationManager.checkGeoTrigger(triggerName, location.getLatitude(), location.getLongitude());
-      			    	
-      			    	if(status.equals("true")){
-      			    		
-      			    		showDialog("Trigger Matched");
-      			    	}
-   				    	 
-   				     
+		    	showPointsonMap(glLocation);
+			    nextPointCount++;
+			    
+			    String status = _locationManager.checkGeoTrigger(triggerName, glLocation.getLatitude(), glLocation.getLongitude());
+		    	
+		    	if(status.equals("true")){
+		    		
+		    		showDialog("Trigger Matched");
+		    	 }
    			    	
-   			    }
+   			 }
  /*End-------------------Code block to start test on the map with selected testcase-------------*/
            }
 			else if(v == _geoTargetingTabLayout){
@@ -266,7 +314,7 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 				}
                else{
 					
-            	   showTriggerDialog();
+//            	   showTriggerDialog();
 					
 				}
 				
@@ -295,40 +343,13 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 	    }
 	} 
 
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		    int latitude = (int) (location.getLatitude() * 1E6);
-	        int longitude = (int) (location.getLongitude() * 1E6);
-	        
-	        _geoPoint = new GeoPoint(latitude, longitude);
-	         mapController.setCenter(_geoPoint);
-	        _mapView.invalidate();
-		
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 		CurrentLocationActivity.this.finish();
+//		CurrentLocationActivity.this.unregisterReceiver(_receiver);
 	}
 	
 	OnWheelScrollListener scrolledListener = new OnWheelScrollListener()
@@ -469,10 +490,57 @@ public class CurrentLocationActivity extends MapActivity implements LocationList
 	   	});	 
 	   	_builder.show();
 	 }
-
+      
+      private void getBatteryLevel(){
+    	  
+    	 _receiver = new BatteryReceiver();
+    	 registerReceiver(_receiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    	  
+      }
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+//		CurrentLocationActivity.this.unregisterReceiver(_receiver);
+	}
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	private class MyLocationListener implements LocationListener{
+
+		@Override
+		public void onLocationChanged(Location location) {
+			// TODO Auto-generated method stub
+			
+			int latitude = (int) (location.getLatitude() * 1E6);
+	        int longitude = (int) (location.getLongitude() * 1E6);
+	        
+	        _geoPoint = new GeoPoint(latitude, longitude);
+	         mapController.setCenter(_geoPoint);
+	        _mapView.invalidate();
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
 	}
 }

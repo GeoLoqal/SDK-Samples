@@ -41,16 +41,16 @@
 				       android:layout_weight="100"
 				       android:layout_below="@+id/view2"
 				       android:apiKey="0OSR-WDsenEl8HLOjuXEqaRdU5v5x79zV7mEQSw"/>  -->
-				<com.google.android.maps.MapView
+				<com.google.android.maps.MapView 
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent"
 						android:layout_weight="100"
 						android:enabled="true"
 						android:clickable="true"
 						android:id="@+id/theMap" 
-						android:apiKey="0zhRsE-5EPSdw727NoJtYg_jfDMWyBz5guJXj6w" > 
+						android:apiKey="0OSR-WDsenEl8HLOjuXEqaRdU5v5x79zV7mEQSw" > 
 
-	           </com.google.android.maps.MapView>       
+	           </com.google.android.maps.MapView >       
 	       </FrameLayout>   
            <LinearLayout    
 				   android:layout_width="fill_parent"
