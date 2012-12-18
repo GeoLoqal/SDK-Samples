@@ -29,7 +29,7 @@
     [self.window makeKeyAndVisible];
     
             //set API key here
-    [GLLocationManager setApiKey:@"0000013b-7086-dcca-1d59-a158a1e3edbf"];
+    [GLLocationManager setApiKey:@"INSERT YOUR API KEY HERE"];
     return YES;
 }
 
