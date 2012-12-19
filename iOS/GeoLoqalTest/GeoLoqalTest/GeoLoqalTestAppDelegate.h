@@ -3,7 +3,7 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

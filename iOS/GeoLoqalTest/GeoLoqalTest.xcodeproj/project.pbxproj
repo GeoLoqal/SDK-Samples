@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		032182CC167F6A8400D1A9C7 /* libGeoLoqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 032182CB167F6A8400D1A9C7 /* libGeoLoqal.a */; };
 		03616A291665E9B100A873D3 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 03616A281665E9B100A873D3 /* default.png */; };
 		03616A2B1665EBD000A873D3 /* geoloqal_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 03616A2A1665EBD000A873D3 /* geoloqal_icon.png */; };
 		03A88E32164144070011E627 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A88E31164144070011E627 /* MapKit.framework */; };
 		03DB3B701670961E007AE2E0 /* geoloqallogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB3B6F1670961E007AE2E0 /* geoloqallogo.png */; };
+		CEB11D94167B4989005ABF42 /* libGeoLoqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB11D93167B4989005ABF42 /* libGeoLoqal.a */; };
 		CEB771DD164001DE00CE49D4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771DC164001DE00CE49D4 /* UIKit.framework */; };
 		CEB771DF164001DE00CE49D4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771DE164001DE00CE49D4 /* Foundation.framework */; };
 		CEB771E1164001DE00CE49D4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEB771E0164001DE00CE49D4 /* CoreGraphics.framework */; };
@@ -24,12 +24,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		032182CB167F6A8400D1A9C7 /* libGeoLoqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGeoLoqal.a; sourceTree = "<group>"; };
-		0346428C167F02200076A61E /* GLLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLocationManager.h; sourceTree = "<group>"; };
 		03616A281665E9B100A873D3 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		03616A2A1665EBD000A873D3 /* geoloqal_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqal_icon.png; sourceTree = "<group>"; };
 		03A88E31164144070011E627 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		03DB3B6F1670961E007AE2E0 /* geoloqallogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqallogo.png; sourceTree = "<group>"; };
+		CEB11D64167B3FC1005ABF42 /* GLLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLocationManager.h; sourceTree = "<group>"; };
+		CEB11D93167B4989005ABF42 /* libGeoLoqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGeoLoqal.a; sourceTree = "<group>"; };
 		CEB771D8164001DE00CE49D4 /* GeoLoqalTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoLoqalTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEB771DC164001DE00CE49D4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CEB771DE164001DE00CE49D4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -56,7 +56,7 @@
 				CEB771DD164001DE00CE49D4 /* UIKit.framework in Frameworks */,
 				CEB771DF164001DE00CE49D4 /* Foundation.framework in Frameworks */,
 				CEB771E1164001DE00CE49D4 /* CoreGraphics.framework in Frameworks */,
-				032182CC167F6A8400D1A9C7 /* libGeoLoqal.a in Frameworks */,
+				CEB11D94167B4989005ABF42 /* libGeoLoqal.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,8 +123,8 @@
 		CEB771FB164001F200CE49D4 /* GeoLoqal SDK */ = {
 			isa = PBXGroup;
 			children = (
-				032182CB167F6A8400D1A9C7 /* libGeoLoqal.a */,
-				0346428C167F02200076A61E /* GLLocationManager.h */,
+				CEB11D93167B4989005ABF42 /* libGeoLoqal.a */,
+				CEB11D64167B3FC1005ABF42 /* GLLocationManager.h */,
 			);
 			name = "GeoLoqal SDK";
 			sourceTree = "<group>";
@@ -276,8 +276,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GeoLoqalTest\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products/Release-iphoneos\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-bmrfebqnuppiggcovseiibklnady/Build/Products/Release-iphonesimulator\"",
 				);
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -293,6 +295,9 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GeoLoqalTest\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products/Release-iphoneos\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-fsccwrvbhwyxcielbfphkoacejmj/Build/Products\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-bmrfebqnuppiggcovseiibklnady/Build/Products/Release-iphonesimulator\"",
 				);
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";

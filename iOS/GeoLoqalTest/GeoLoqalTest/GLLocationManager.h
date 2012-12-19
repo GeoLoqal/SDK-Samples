@@ -3,12 +3,11 @@
 //  GeoLoqal
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "GLLocationManager.h"
-#import <CoreLocation/CoreLocation.h>
 
 typedef struct {
 	double latitude;
@@ -28,7 +27,7 @@ typedef struct {
 
 @end
 
-@interface GLLocationManager : NSObject<CLLocationManagerDelegate>
+@interface GLLocationManager : NSObject
 
 @property (nonatomic, strong) id<GeoLoqalDelegate> delegate;
 

@@ -3,7 +3,7 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import "GeoLoqalTestViewController.h"
@@ -253,8 +253,10 @@ UIActivityIndicatorView *_searchActivity;;
     _location.longitude = lon;
      [self drawPointOnMap];
     if (_selectTrigger != nil) {
-        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_locationCordinate.latitude] lon:[NSString stringWithFormat:@"%f",_locationCordinate.longitude]]; 
+        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude]]; 
     }
+
+//    [_glLocationManager createInsideCircleTrigger:@"demoCircle" lat:[NSString stringWithFormat:@"%f",lat] lon:[NSString stringWithFormat:@"%f",lon] rad:20];
 }
             ////////end all delegate Imaplementation/////////
         
@@ -325,18 +327,13 @@ UIActivityIndicatorView *_searchActivity;;
         NSLog(@"startTestPressed %@",_selectedTestCase);
         [_glLocationManager registrationWithTestCase:_selectedTestCase];
         _startTestBtn.hidden = NO;
+    }else{
+        
+        if (_selectedTrigger != nil) {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"You have to associate a test case with this trigger" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+        }
+        
     }
-    if (_selectTrigger != nil) {
-        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_locationCordinate.latitude] lon:[NSString stringWithFormat:@"%f",_locationCordinate.longitude]]; 
-    }
-
-//    }else{
-//        
-//        if (_selectedTrigger != nil) {
-//            [[[UIAlertView alloc] initWithTitle:nil message:@"You have to associate a test case with this trigger" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-//        }
-//        
-//    }
 
 }
 -(void)drawPointOnMap{
