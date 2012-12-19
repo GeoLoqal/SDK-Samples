@@ -3,7 +3,7 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
 //
 
 #import "GeoLoqalTestAppDelegate.h"
@@ -16,23 +16,42 @@
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
+@synthesize coordinate;
+
+CLLocation *location;
+CLLocation *_oldLocation;
+CLLocation *_newLocation;
+CLLocationManager *_locationManager;
+NSTimer *_locationTimer;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     sleep(1);
     
+    _locationManager = [[CLLocationManager alloc]init];
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters; 
+    _locationManager.distanceFilter = 50.0;
+    [_locationManager startUpdatingLocation];
+    
+     location = [_locationManager location];
+     coordinate = [location coordinate];
+     NSLog(@"coordinate %f",coordinate.latitude);
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.viewController = [[GeoLoqalTestViewController alloc] initWithNibName:@"GeoLoqalTestViewController" bundle:nil];
+    self.viewController._locationCordinate = coordinate;
     UINavigationController *_nav = [[UINavigationController alloc]initWithRootViewController:self.viewController];
     self.window.rootViewController = _nav;
     [self.window makeKeyAndVisible];
     
             //set API key here
-    [GLLocationManager setApiKey:@"INSERT YOUR API KEY HERE"];
+    [GLLocationManager setApiKey:@"INSERT YOUR API KEY"];
+    
+    
     return YES;
 }
-
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     /*
@@ -47,6 +66,8 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
+    NSLog(@"applicationDidEnterBackground");
+    
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -54,6 +75,7 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
+    NSLog(@"applicationWillEnterForeground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -61,6 +83,8 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    NSLog(@"applicationDidBecomeActive"); 
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -70,6 +94,7 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+    NSLog(@"applicationWillTerminate");
 }
 
 @end

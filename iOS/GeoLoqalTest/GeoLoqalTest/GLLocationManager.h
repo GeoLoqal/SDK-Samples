@@ -3,13 +3,12 @@
 //  GeoLoqal
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 #import "GLLocationManager.h"
-
+#import <CoreLocation/CoreLocation.h>
 
 typedef struct {
 	double latitude;
@@ -58,9 +57,6 @@ typedef struct {
 
 //method for checking  whether latitude and loangitude points reside inside a particular Trigger
 -(void)getCheckedGeoTriggerName:(NSString *)triggerName lat:(NSString *)latitude lon:(NSString *)longitude;
-
-// create a Trigger for "Inside_Circle" trigger type
--(void)createInsideCircleTrigger:(NSString *)triggerName lat:(NSString *)latitude lon:(NSString *)longitude rad:(int)_radius;
 
 
 @end

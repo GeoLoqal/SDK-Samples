@@ -3,7 +3,7 @@
 //  GeoLoqalTest
 //
 //  Created by user on 30/10/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 GeoLoqal LLC. All rights reserved.
 //
 
 #import "GeoLoqalTestViewController.h"
@@ -13,6 +13,7 @@
 @implementation GeoLoqalTestViewController
 
 @synthesize _locationCordinate;
+@synthesize _geoLoqalTestAppDelegate;
 
 - (void)didReceiveMemoryWarning
 {
@@ -43,9 +44,6 @@ UIButton *_startTestBtn;
 
 MKMapView *_mapView;
 
-CLLocationCoordinate2D coordinate;
-CLLocation *location;
-
 UIActionSheet *actionSheetTestCase;
 UIActionSheet *actionSheetTrigger;
 
@@ -61,7 +59,7 @@ UIActivityIndicatorView *_searchActivity;;
     _glLocationManager.speed = 100;
     _glLocationManager.outputType = @"json";
     _glLocationManager.delegate = self;
-
+    
     _testCaseNameArr = [[NSMutableArray alloc]init];
     
     _mapView = [[MKMapView alloc]initWithFrame:CGRectMake(0, 0, 320, 385)];
@@ -72,23 +70,12 @@ UIActivityIndicatorView *_searchActivity;;
     _mapView.showsUserLocation = YES;
     [self.view addSubview:_mapView];
     
-    CLLocationManager *_locationManager = [[CLLocationManager alloc]init];
-    _locationManager.desiredAccuracy = kCLLocationAccuracyBest; 
-    _locationManager.distanceFilter = 50.0;
-    _locationManager.delegate = self;
-    [_locationManager startUpdatingLocation];
-    
-    location = [_locationManager location];
-    coordinate = [location coordinate];
-    
-    NSLog(@"_ current location %f--%f",coordinate.latitude,coordinate.longitude);
-    
     MKCoordinateRegion region;
     MKCoordinateSpan span;
     span.latitudeDelta=0.2;
     span.longitudeDelta=0.2;
     region.span=span;
-    region.center=coordinate;
+    region.center=_locationCordinate;
     [_mapView setRegion:region animated:TRUE];
     [_mapView regionThatFits:region];
     
@@ -116,7 +103,13 @@ UIActivityIndicatorView *_searchActivity;;
     [_startTestBtn addTarget:self action:@selector(startTestPressed) forControlEvents:UIControlEventTouchDown];
     _startTestBtn.enabled = NO;
     [self.view addSubview:_startTestBtn];
+    
 
+    NSLog(@"current locatin%f--",_locationCordinate.latitude);
+    
+    [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
+    float batteryLevel = [[UIDevice currentDevice] batteryLevel];
+    NSLog(@"batteryLevel %f",batteryLevel);
 }
 -(void)createTestCaseAlert{
     
@@ -260,10 +253,8 @@ UIActivityIndicatorView *_searchActivity;;
     _location.longitude = lon;
      [self drawPointOnMap];
     if (_selectTrigger != nil) {
-        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude]]; 
+        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_locationCordinate.latitude] lon:[NSString stringWithFormat:@"%f",_locationCordinate.longitude]]; 
     }
-
-//    [_glLocationManager createInsideCircleTrigger:@"demoCircle" lat:[NSString stringWithFormat:@"%f",lat] lon:[NSString stringWithFormat:@"%f",lon] rad:20];
 }
             ////////end all delegate Imaplementation/////////
         
@@ -334,13 +325,18 @@ UIActivityIndicatorView *_searchActivity;;
         NSLog(@"startTestPressed %@",_selectedTestCase);
         [_glLocationManager registrationWithTestCase:_selectedTestCase];
         _startTestBtn.hidden = NO;
-    }else{
-        
-        if (_selectedTrigger != nil) {
-            [[[UIAlertView alloc] initWithTitle:nil message:@"You have to associate a test case with this trigger" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-        }
-        
     }
+    if (_selectTrigger != nil) {
+        [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_locationCordinate.latitude] lon:[NSString stringWithFormat:@"%f",_locationCordinate.longitude]]; 
+    }
+
+//    }else{
+//        
+//        if (_selectedTrigger != nil) {
+//            [[[UIAlertView alloc] initWithTitle:nil message:@"You have to associate a test case with this trigger" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+//        }
+//        
+//    }
 
 }
 -(void)drawPointOnMap{
@@ -376,10 +372,6 @@ UIActivityIndicatorView *_searchActivity;;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -394,6 +386,37 @@ UIActivityIndicatorView *_searchActivity;;
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
+}
+- (void)readPlist;
+{
+    NSString *filePath = @"/SWAGATIKA/My Apps/GeoloqalSDK/GeoLoqalSDK/10DecModificationGeoloqalSDK/GeoLoqalTest/GeoLoqalTest/GeoLoqalTest-Info.plist";
+    NSMutableDictionary* plistDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    NSArray *_allKeys = [plistDict allKeys];
+    for (int i=0; i<_allKeys.count; i++) {
+        NSLog(@"readPlist %@",[_allKeys objectAtIndex:i]);
+    }
+    NSString *value;
+    value = [plistDict objectForKey:@"CFBundleDisplayName"];
+    
+    /* You could now call the string "value" from somewhere to return the value of the string in the .plist specified, for the specified key. */
+}
+
+- (void)writeToPlist;
+{
+    NSString *filePath = @"/SWAGATIKA/My Apps/GeoloqalSDK/GeoLoqalSDK/10DecModificationGeoloqalSDK/GeoLoqalTest/GeoLoqalTest/GeoLoqalTest-Info.plist";
+    NSMutableDictionary* plistDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+    
+    [plistDict setValue:@"GeoLoqalTest_App" forKey:@"CFBundleDisplayName"];
+    [plistDict writeToFile:filePath atomically: YES];
+    
+    /* This would change the firmware version in the plist to 1.1.1 by initing the NSDictionary with the plist, then changing the value of the string in the key "ProductVersion" to what you specified */
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //[self writeToPlist];
+    //[self readPlist];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
