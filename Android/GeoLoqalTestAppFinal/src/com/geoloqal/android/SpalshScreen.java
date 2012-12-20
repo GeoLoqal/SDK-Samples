@@ -28,7 +28,7 @@ public class SpalshScreen extends Activity {
 			public void run() {
 				// TODO Auto-generated method stub
 				
-					Intent _intent = new Intent(SpalshScreen.this,CurrentLocationActivity.class);
+					Intent _intent = new Intent(SpalshScreen.this,GeoLoqalTestActivity.class);
 					startActivity(_intent);
 					SpalshScreen.this.finish();
 				

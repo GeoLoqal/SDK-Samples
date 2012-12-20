@@ -20,6 +20,5 @@
 
 @property (nonatomic)CLLocationCoordinate2D coordinate;
 
--(void)startUpdateLocation;
 
 @end

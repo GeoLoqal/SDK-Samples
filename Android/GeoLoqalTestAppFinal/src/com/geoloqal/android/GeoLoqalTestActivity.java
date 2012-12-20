@@ -7,10 +7,7 @@ import org.json.JSONArray;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,10 +16,7 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -34,15 +28,15 @@ import com.android.wheelpicker.ArrayWheelAdapter;
 import com.android.wheelpicker.OnWheelChangedListener;
 import com.android.wheelpicker.OnWheelScrollListener;
 import com.android.wheelpicker.WheelView;
+import com.geoloqal.android.data.GLData;
 import com.geoloqal.android.data.GLLocation;
-import com.geoloqal.android.data.TriggerData;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
-public class CurrentLocationActivity extends MapActivity{
+public class GeoLoqalTestActivity extends MapActivity implements LocationListener{
 	
 	private GLLocationManager _locationManager = null;
 	private MapView _mapView =null;
@@ -51,7 +45,7 @@ public class CurrentLocationActivity extends MapActivity{
 	private LinearLayout _startTestTabLayout = null;
 	
 	private ArrayList<String> _alltestCases;
-	private ArrayList<TriggerData> _allTrigger;
+	private ArrayList<GLData> _allTrigger;
 	private ArrayList<String> _alltriggerName ;
 	public  ArrayList<String> _alltestcaseName = null;
 	
@@ -73,14 +67,16 @@ public class CurrentLocationActivity extends MapActivity{
 	private double _latitude;
 	private double _longitude;
 	
-	private GLLocation glLocation = null;
-	private Location location = null;
+	private GLLocation location = null;
 	
 	private static int nextPointCount = 0;
 	
 	private Dialog dialog = null;
 	
-	BatteryReceiver _receiver;
+	private static String APIKEY = "INSERT YOUR API KEY;
+	private static String UNIT = "kph";
+	private static String OUTPUTTYPE = "json";
+	private static int SPEED = 10;
 	
 	
 	@Override
@@ -90,12 +86,10 @@ public class CurrentLocationActivity extends MapActivity{
 			requestWindowFeature(Window.FEATURE_NO_TITLE);
 			setContentView(R.layout.location_service);
 			getComponent();
-			getBatteryLevel();
-			
 		
 	}
 	
-	private void getComponent(){
+ private void getComponent(){
 		
 		 
 		_geoLocationTabLayout = (LinearLayout)findViewById(R.id.geoLocationButton);
@@ -110,10 +104,10 @@ public class CurrentLocationActivity extends MapActivity{
     	_geoTargetingTabLayout.setOnClickListener(new ClickListener());
     	
     	_alltestCases=new ArrayList<String>();
-    	_allTrigger=new ArrayList<TriggerData>();
+    	_allTrigger=new ArrayList<GLData>();
 		
     	_alltestcaseName=new ArrayList<String>();
-		 _alltriggerName = new ArrayList<String>();
+		_alltriggerName = new ArrayList<String>();
 		
 		_mapView= (MapView) findViewById(R.id.theMap);
 		_mapView.setClickable(true);
@@ -123,106 +117,76 @@ public class CurrentLocationActivity extends MapActivity{
 		 mapController = _mapView.getController();
 		 mapController.setZoom(15);
 		 
-		 _locationManager = new GLLocationManager(CurrentLocationActivity.this);
-	     _locationManager.setApiKey("INSERT YOUR API KEY HERE");
-	     _locationManager.setUnit("kph");
-	     _locationManager.setOutPutType("json");
-	     _locationManager.setSpeed(speed);
+		_locationManager = new GLLocationManager(GeoLoqalTestActivity.this);
+	    _locationManager.setApiKey(APIKEY);
+	    _locationManager.setUnit(UNIT);
+	    _locationManager.setOutPutType(OUTPUTTYPE);
+	    _locationManager.setSpeed(SPEED);
        
-         getCurrentLocation();
+        getCurrentLocation();
+        
         _geoPoint =new GeoPoint((int) (_latitude * 1E6),(int) (_longitude * 1E6));
          mapController.setCenter(_geoPoint);
         
          MapOverlay mapOverlay = new MapOverlay();
          List<Overlay> listOfOverlays = _mapView.getOverlays();
          listOfOverlays.clear();
-         listOfOverlays.add(mapOverlay);
+         listOfOverlays.add(mapOverlay);  
 	}
 	
-	private void showPointsonMap(GLLocation location){
+ private void showPointsonMap(GLLocation location){
 		
 		if(location!=null){
-		     _geoPoint = new GeoPoint((int) (location.getLatitude() * 1E6),(int) (location.getLongitude() * 1E6));
+		    _geoPoint = new GeoPoint((int) (location.getLatitude() * 1E6),(int) (location.getLongitude() * 1E6));
 		     mapController.setCenter(_geoPoint);
 		     
 		     MapOverlay mapOverlay = new MapOverlay();
 		     List<Overlay> listOfOverlays = _mapView.getOverlays();
 		     listOfOverlays.clear();
 		     listOfOverlays.add(mapOverlay); 
-		     _mapView.invalidate();
+		    _mapView.invalidate();
 		}
-		
 		else{
-			showDialog("Unable to find location");
-		}
+			 showDialog("Unable to find location");
+		 }
 		
 	}
-	private void getCurrentLocation() {
+ private void getCurrentLocation() {
 		
-		long minTime = 2*60*1000;
-		float minDistance = 10;
-		Location prevLoc= null;
-		Location newLoc= null;
-		
-		 _locationocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		 MyLocationListener _listener = new MyLocationListener();
-		  if(_locationocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-			 
-			 provider = LocationManager.GPS_PROVIDER;
-		   }
-		  else if(_locationocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-			  
-			  provider = LocationManager.NETWORK_PROVIDER;
-			  
-		  }
-	    _locationocationManager.requestLocationUpdates(provider, minTime, minDistance, _listener);
-		
-	    prevLoc=location;
-    	location =	_locationocationManager.getLastKnownLocation(provider);
-    	newLoc = location;
-    	
-    	if(location!=null){
-    		
-    		_latitude=location.getLatitude();
-    		_longitude= location.getLongitude();
-    		
-	        _geoPoint = new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
-	         mapController.setCenter(_geoPoint);
-	        
-	         MapOverlay mapOverlay = new MapOverlay();
-		     List<Overlay> listOfOverlays = _mapView.getOverlays();
-		     listOfOverlays.clear();
-		     listOfOverlays.add(mapOverlay);
-		     _mapView.invalidate();
-    	}
-
-	}
-	
-  public  void turnGPSOff(){
-		
-		System.out.println("turnGPSOff");
-		
-		try{
-		    String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-
-		    if(provider.contains("gps")){
-		         final Intent poke = new Intent();
-		         poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider"); 
-		         poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-		         poke.setData(Uri.parse("3")); 
-		         sendBroadcast(poke);
-		      }
+		    _locationocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		    
-		    Toast.makeText(CurrentLocationActivity.this, "Your GPS is disebled",Toast.LENGTH_SHORT).show();
-	      }
-	     catch(Exception e)
-	     {
-	      Log.d("Location", " exception thrown in enabling GPS "+e);
-	     }
+		     if(_locationocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			 
+			         provider = LocationManager.GPS_PROVIDER;
+		        }
+		     else if(_locationocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+			  
+			         provider = LocationManager.NETWORK_PROVIDER;
+			  
+		       }
+		  
+	       _locationocationManager.requestLocationUpdates(provider, 1000, 100, this);
+		
+    	    Location location =	_locationocationManager.getLastKnownLocation(provider);
+    	
+    	    if(location!=null){
+    		
+		    		_latitude=location.getLatitude();
+		    		_longitude= location.getLongitude();
+		    		
+					 String message = String.format("Current location \n Latitude: %1$s \n Longitude: %2$s",location.getLatitude(), location.getLongitude());
+			        _geoPoint = new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
+			         mapController.setCenter(_geoPoint);
+			        
+			         MapOverlay mapOverlay = new MapOverlay();
+				     List<Overlay> listOfOverlays = _mapView.getOverlays();
+				     listOfOverlays.clear();
+				     listOfOverlays.add(mapOverlay);  
+				     _mapView.invalidate();
+    	      }
 
 	}
-	
-	private class ClickListener implements OnClickListener{
+ private class ClickListener implements OnClickListener{
 
 		@Override
 		public void onClick(View v) {
@@ -230,95 +194,84 @@ public class CurrentLocationActivity extends MapActivity{
 
 			if(v == _geoLocationTabLayout){
 /*Start-------------------Code block to get all testcases associated with your api-key-------------*/
-				_alltestCases.clear();
+				    _alltestCases.clear();
 				
-//				 _mapView.setOnChangeListener(new MapViewChangeListener());
-				_startTestTabLayout.setEnabled(true);
+				    _startTestTabLayout.setEnabled(true);
 				
-				_alltestCases=_locationManager.getTestCases();
+				    _alltestCases=_locationManager.getTestCases();
 				
-				if(_alltestCases.size() != 0){
+				  if(_alltestCases.size() != 0){
 					
-					System.out.println("_alltestCases"+_alltestCases);
-					showallTestcases = _alltestCases.toArray(new String[_alltestCases.size()]);
-					showTestCaseDialog();
-					initWheelforTestcases(R.id.optionswheel);
-				}
-				else{
-					
-//					showTestCaseDialog();
-					
-				}
+					 showallTestcases = _alltestCases.toArray(new String[_alltestCases.size()]);
+					 showTestCaseDialog();
+					 initWheelforTestcases(R.id.optionswheel);
+				  }
+				  else{
+						
+					  showTestCaseDialog();
+						
+				  }
 				
 				
 /*End-------------------Code block to get all testcases associated with your api-key-------------*/	
 				
 			}
-           else if(v == _startTestTabLayout){
+            else if(v == _startTestTabLayout){
         	  
  /*Start-------------------Code block to start test on the map with selected testcase-------------*/
         	  
-   			   _locationManager.setNextCount(nextPointCount);
+   			         _locationManager.setNextCount(nextPointCount);
    			   
-   			   if(testCaseName != null && triggerName == null){
+   			      if(testCaseName != null && triggerName == null){
    				   
-   				glLocation = _locationManager.registration(testCaseName);
-   					
-   					showPointsonMap(glLocation);
-   	   			    nextPointCount++;
-    			   
+   				       location = _locationManager.registration(testCaseName);
+   					   showPointsonMap(location);
+   	   			       nextPointCount++;
    			    
-   			   }
-   			   else if(triggerName != null && testCaseName == null){
+   			        }
+   			      else if(triggerName != null && testCaseName == null){
 			    	
-			    	showDialog("You have to associate a test case with this trigger");
-			    }
-   			   else if(testCaseName != null && triggerName != null){
+			    	    showDialog("You have to associate a test case with this trigger");
+			        }
+   			      else if(testCaseName != null && triggerName != null){
    				   
-   				glLocation = _locationManager.registration(testCaseName);
-   				    	 
-		    	showPointsonMap(glLocation);
-			    nextPointCount++;
-			    
-			    String status = _locationManager.checkGeoTrigger(triggerName, glLocation.getLatitude(), glLocation.getLongitude());
-		    	
-		    	if(status.equals("true")){
-		    		
-		    		showDialog("Trigger Matched");
-		    	 }
-   			    	
-   			 }
+   				        location = _locationManager.registration(testCaseName);
+   				    	showPointsonMap(location);
+        			    nextPointCount++;
+      			    	String status = _locationManager.checkGeoTrigger(triggerName, location.getLatitude(), location.getLongitude());
+      			    	if(status.equals("true")){
+      			    		
+      			    		showDialog("Trigger Matched");
+      			    	}
+   			        }
  /*End-------------------Code block to start test on the map with selected testcase-------------*/
-           }
+            }
 			else if(v == _geoTargetingTabLayout){
  /*Start-------------------Code block to check triggers----------------------------------*/
-				_allTrigger.clear();
+				        _allTrigger.clear();
 				
-				_startTestTabLayout.setEnabled(true);
+				        _startTestTabLayout.setEnabled(true);
 				
-				_allTrigger=_locationManager.getTriggers();
+				        _allTrigger=_locationManager.getTriggers();
 				
-				if(_allTrigger.size() != 0){
-					
-					for(int i = 0;i<_allTrigger.size();i++){
-						 
-						 if(_allTrigger.get(i).getTriggerName() != null){
-							 
-							 _alltriggerName.add(_allTrigger.get(i).getTriggerName());
-							 showallTriggers= _alltriggerName.toArray(new String[_alltriggerName.size()]);
-						 }
-						
-					 }
-					showTriggerDialog();
-					initWheelforTrigger(R.id.optionswheel);
+				        if(_allTrigger.size() != 0){
+							for(int i = 0;i<_allTrigger.size();i++){
+								 
+								 if(_allTrigger.get(i).getTriggerName() != null){
+									 
+									 _alltriggerName.add(_allTrigger.get(i).getTriggerName());
+									 showallTriggers= _alltriggerName.toArray(new String[_alltriggerName.size()]);
+								 }
+								
+							 }
+					     showTriggerDialog();
+					     initWheelforTrigger(R.id.optionswheel);
 				}
-               else{
+             else{
 					
-//            	   showTriggerDialog();
+            	   showTriggerDialog();
 					
 				}
-				
-				
 			}
 		}
 		 /*End-------------------Code block to check triggers-------------------------------------------*/
@@ -336,20 +289,47 @@ public class CurrentLocationActivity extends MapActivity{
 	        Point screenPts = new Point();
 	        mapView.getProjection().toPixels(_geoPoint, screenPts);
 
-	        Bitmap bmp = BitmapFactory.decodeResource(
-	            getResources(), R.drawable.geoloqal_pushpin);            
+	        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.geoloqal_pushpin);  
+	                      
 	        canvas.drawBitmap(bmp, screenPts.x, screenPts.y-50, null);         
 	        return true;
 	    }
 	} 
 
-	
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		    int latitude = (int) (location.getLatitude() * 1E6);
+	        int longitude = (int) (location.getLongitude() * 1E6);
+	        
+	       _geoPoint = new GeoPoint(latitude, longitude);
+	        mapController.setCenter(_geoPoint);
+	       _mapView.invalidate();
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
-		CurrentLocationActivity.this.finish();
-//		CurrentLocationActivity.this.unregisterReceiver(_receiver);
+		GeoLoqalTestActivity.this.finish();
 	}
 	
 	OnWheelScrollListener scrolledListener = new OnWheelScrollListener()
@@ -403,12 +383,12 @@ public class CurrentLocationActivity extends MapActivity{
 	
 	private void initWheelforTrigger(int id)
 	{
-		WheelView wheel = (WheelView)dialog.findViewById(id);
-		wheel.setViewAdapter(new ArrayWheelAdapter(this,showallTriggers));
-		wheel.setVisibleItems(2);
-		wheel.setCurrentItem(0);
-		wheel.addChangingListener(changedListener);
-		wheel.addScrollingListener(scrolledListener);
+			WheelView wheel = (WheelView)dialog.findViewById(id);
+			wheel.setViewAdapter(new ArrayWheelAdapter(this,showallTriggers));
+			wheel.setVisibleItems(2);
+			wheel.setCurrentItem(0);
+			wheel.addChangingListener(changedListener);
+			wheel.addScrollingListener(scrolledListener);
 	}
 	
 	
@@ -427,21 +407,25 @@ public class CurrentLocationActivity extends MapActivity{
 		}
     private void showTestCaseDialog(){
     	
-        dialog = new Dialog(CurrentLocationActivity.this);
+        dialog = new Dialog(GeoLoqalTestActivity.this);
     	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.options_dialog);
 
 		Button _setButton = (Button) dialog.findViewById(R.id.saveButton);
-		_setButton.setOnClickListener(new OnClickListener() {
+	   _setButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 					
-				testCaseName = showallTestcases[(int) getWheel(R.id.optionswheel).getCurrentItem()];
+				if(_alltestCases.size() != 0){
+					
+					testCaseName = showallTestcases[(int) getWheel(R.id.optionswheel).getCurrentItem()];
+				}
+				
 				dialog.dismiss();
 			}
 		});
 		Button _cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-		_cancelButton.setOnClickListener(new OnClickListener() {
+	   _cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
@@ -453,21 +437,25 @@ public class CurrentLocationActivity extends MapActivity{
     
     private void showTriggerDialog() {
 		// TODO Auto-generated method stub
-		dialog = new Dialog(CurrentLocationActivity.this);
+		dialog = new Dialog(GeoLoqalTestActivity.this);
     	dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		dialog.setContentView(R.layout.options_dialog);
 
 		Button _setButton = (Button) dialog.findViewById(R.id.saveButton);
-		_setButton.setOnClickListener(new OnClickListener() {
+	   _setButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 					
-				triggerName = showallTriggers[(int) getWheel(R.id.optionswheel).getCurrentItem()]; 
+				if(_allTrigger.size() != 0){
+					
+					triggerName = showallTriggers[(int) getWheel(R.id.optionswheel).getCurrentItem()]; 
+				}
+				
 				dialog.dismiss();
 			}
 		});
 		Button _cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-		_cancelButton.setOnClickListener(new OnClickListener() {
+	   _cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				dialog.dismiss();
@@ -480,7 +468,7 @@ public class CurrentLocationActivity extends MapActivity{
       private void showDialog(String text){
 	   	
 	   	
-	    AlertDialog.Builder _builder = new AlertDialog.Builder(CurrentLocationActivity.this);
+	     AlertDialog.Builder _builder = new AlertDialog.Builder(GeoLoqalTestActivity.this);
 	    _builder.setTitle("Message");
 	    _builder.setMessage(text);
 	    _builder.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
@@ -490,57 +478,10 @@ public class CurrentLocationActivity extends MapActivity{
 	   	});	 
 	   	_builder.show();
 	 }
-      
-      private void getBatteryLevel(){
-    	  
-    	 _receiver = new BatteryReceiver();
-    	 registerReceiver(_receiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-    	  
-      }
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-//		CurrentLocationActivity.this.unregisterReceiver(_receiver);
-	}
+
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-	
-	private class MyLocationListener implements LocationListener{
-
-		@Override
-		public void onLocationChanged(Location location) {
-			// TODO Auto-generated method stub
-			
-			int latitude = (int) (location.getLatitude() * 1E6);
-	        int longitude = (int) (location.getLongitude() * 1E6);
-	        
-	        _geoPoint = new GeoPoint(latitude, longitude);
-	         mapController.setCenter(_geoPoint);
-	        _mapView.invalidate();
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
 	}
 }

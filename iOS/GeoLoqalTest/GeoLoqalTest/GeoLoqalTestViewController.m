@@ -62,7 +62,10 @@ UIActivityIndicatorView *_searchActivity;;
     
     _testCaseNameArr = [[NSMutableArray alloc]init];
     
-    _mapView = [[MKMapView alloc]initWithFrame:CGRectMake(0, 0, 320, 385)];
+    NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:0 diskCapacity:0 diskPath:nil];
+    [NSURLCache setSharedURLCache:sharedCache];
+    
+    _mapView = [[MKMapView alloc]initWithFrame:CGRectMake(0, 0, 320, 384)];
     _mapView.delegate = self;
     _mapView.zoomEnabled = YES;
     _mapView.scrollEnabled = YES;
@@ -80,15 +83,14 @@ UIActivityIndicatorView *_searchActivity;;
     [_mapView regionThatFits:region];
     
     _showTestCaseBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showTestCaseBtn.frame = CGRectMake(2, 384,100, 30);
-    _showTestCaseBtn.layer.cornerRadius = 6.0f;
+    _showTestCaseBtn.frame = CGRectMake(7, 384,100, 30);
     [_showTestCaseBtn setTitle:@"TestCases" forState:UIControlStateNormal];
     _showTestCaseBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [_showTestCaseBtn addTarget:self action:@selector(showPointBtnPressed) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:_showTestCaseBtn];
     
     _showTriggerBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _showTriggerBtn.layer.cornerRadius = 6.0f;
+    
     _showTriggerBtn.frame = CGRectMake(110, 384, 100, 30);
     [_showTriggerBtn setTitle:@"GeoTargeting" forState:UIControlStateNormal];
     _showTriggerBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -96,8 +98,7 @@ UIActivityIndicatorView *_searchActivity;;
     [self.view addSubview:_showTriggerBtn];
     
     _startTestBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    _startTestBtn.layer.cornerRadius = 6.0f;
-    _startTestBtn.frame = CGRectMake(218, 384, 100, 30);
+    _startTestBtn.frame = CGRectMake(213, 384, 100, 30);
     [_startTestBtn setTitle:@"Start Test" forState:UIControlStateNormal];
     _startTestBtn.titleLabel.font = [UIFont boldSystemFontOfSize:12];
     [_startTestBtn addTarget:self action:@selector(startTestPressed) forControlEvents:UIControlEventTouchDown];
@@ -105,12 +106,8 @@ UIActivityIndicatorView *_searchActivity;;
     [self.view addSubview:_startTestBtn];
     
 
-    NSLog(@"current locatin%f--",_locationCordinate.latitude);
-    
-    [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-    float batteryLevel = [[UIDevice currentDevice] batteryLevel];
-    NSLog(@"batteryLevel %f",batteryLevel);
 }
+
 -(void)createTestCaseAlert{
     
     actionSheetTestCase = [[UIActionSheet alloc]initWithTitle:@"" delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:nil];
@@ -121,7 +118,6 @@ UIActivityIndicatorView *_searchActivity;;
     _pickerViewTestCase.showsSelectionIndicator = YES;
     _pickerViewTestCase.frame=CGRectMake(0, 44, 320,250);
     _pickerViewTestCase.tag = 1;
-    _pickerViewTestCase.delegate = self;
     
     UIToolbar *pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
     pickerToolbar.backgroundColor = [UIColor redColor];
@@ -153,7 +149,6 @@ UIActivityIndicatorView *_searchActivity;;
     _pickerViewTrigger = [[UIPickerView alloc] init];
     _pickerViewTrigger.showsSelectionIndicator = YES;
     _pickerViewTrigger.frame=CGRectMake(0, 44, 320,250);
-    _pickerViewTrigger.delegate = self;
     _pickerViewTrigger.tag = 2;
     
     UIToolbar *pickerToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
@@ -256,20 +251,26 @@ UIActivityIndicatorView *_searchActivity;;
         [_glLocationManager getCheckedGeoTriggerName:_selectTrigger lat:[NSString stringWithFormat:@"%f",_location.latitude] lon:[NSString stringWithFormat:@"%f",_location.longitude]]; 
     }
 
-//    [_glLocationManager createInsideCircleTrigger:@"demoCircle" lat:[NSString stringWithFormat:@"%f",lat] lon:[NSString stringWithFormat:@"%f",lon] rad:20];
+
 }
-            ////////end all delegate Imaplementation/////////
+////////end all delegate Imaplementation/////////
         
 -(void)showPointBtnPressed
 {
-    [self createTestCaseAlert];
+    
     [_glLocationManager getTestCaseNames];
+    if (_testCaseNameArr != nil) {
+        [self createTestCaseAlert];
+    }
     
 }
 -(void)showTriggerPressed{
     
-    [self createTriggerAlert];
+    
     [_glLocationManager getTriggerNames];
+    if (_triggerNameArr != nil) {
+        [self createTriggerAlert];
+    }
     
 }
 
@@ -281,8 +282,9 @@ UIActivityIndicatorView *_searchActivity;;
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (pickerView.tag == 1) {
-        NSLog(@"row %d",row);
-        _selectTestCase =  [_testCaseNameArr objectAtIndex:row];        
+        
+        _selectTestCase =  [_testCaseNameArr objectAtIndex:row];  
+        NSLog(@"_selectedTrigger %@",_selectTestCase);
     }else if(pickerView.tag == 2){
         
         _selectedTrigger =  [_triggerNameArr objectAtIndex:row];
@@ -338,12 +340,10 @@ UIActivityIndicatorView *_searchActivity;;
 }
 -(void)drawPointOnMap{
         
-    NSLog(@"drawPointOnMap _location.latitude %f",_location.latitude);
     CLLocationCoordinate2D coords;
     coords.latitude = _location.latitude;
     coords.longitude = _location.longitude;
     
-    //_mapView.centerCoordinate = coords;
     [_mapView setCenterCoordinate:coords animated:YES];
     
     if (_mapView.annotations.count > 0) {
@@ -353,16 +353,25 @@ UIActivityIndicatorView *_searchActivity;;
     _pointAnnotation.coordinate = coords;
     [_mapView addAnnotation:_pointAnnotation];
 }
-- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation{
 
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>)annotation
+{ 
+    static NSString *placemarkIdentifier = @"placemark_identifier";
     
-    MKAnnotationView *pinView = [[MKAnnotationView alloc]initWithAnnotation:annotation reuseIdentifier:@"pin"];
-    pinView.canShowCallout = YES;
+    MKAnnotationView *annotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:placemarkIdentifier];
+    if (annotationView == nil) {
+        annotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:placemarkIdentifier];
+    } else {
+        annotationView.annotation = annotation;
+    }
+        
+    annotationView.canShowCallout = YES;
     UIImage *_image = [UIImage imageNamed:@"geoloqallogo.png"];
-    pinView.image = _image;
-    pinView.centerOffset = CGPointMake(0.0, -_image.size.height/2);
-        return pinView;
+    annotationView.image = _image;
+    annotationView.centerOffset = CGPointMake(0.0, -_image.size.height/2);
+    return annotationView;
 }
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -384,42 +393,11 @@ UIActivityIndicatorView *_searchActivity;;
 {
 	[super viewDidDisappear:animated];
 }
-- (void)readPlist;
-{
-    NSString *filePath = @"/SWAGATIKA/My Apps/GeoloqalSDK/GeoLoqalSDK/10DecModificationGeoloqalSDK/GeoLoqalTest/GeoLoqalTest/GeoLoqalTest-Info.plist";
-    NSMutableDictionary* plistDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-    NSArray *_allKeys = [plistDict allKeys];
-    for (int i=0; i<_allKeys.count; i++) {
-        NSLog(@"readPlist %@",[_allKeys objectAtIndex:i]);
-    }
-    NSString *value;
-    value = [plistDict objectForKey:@"CFBundleDisplayName"];
-    
-    /* You could now call the string "value" from somewhere to return the value of the string in the .plist specified, for the specified key. */
-}
-
-- (void)writeToPlist;
-{
-    NSString *filePath = @"/SWAGATIKA/My Apps/GeoloqalSDK/GeoLoqalSDK/10DecModificationGeoloqalSDK/GeoLoqalTest/GeoLoqalTest/GeoLoqalTest-Info.plist";
-    NSMutableDictionary* plistDict = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
-    
-    [plistDict setValue:@"GeoLoqalTest_App" forKey:@"CFBundleDisplayName"];
-    [plistDict writeToFile:filePath atomically: YES];
-    
-    /* This would change the firmware version in the plist to 1.1.1 by initing the NSDictionary with the plist, then changing the value of the string in the key "ProductVersion" to what you specified */
-}
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    //[self writeToPlist];
-    //[self readPlist];
-}
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
+    return NO;
 }
 
 @end
