@@ -49,3 +49,4 @@ iv)	 Press the Send button
 7)	 When you click on the GeoLocation button, you will get all the test cases for the API key, Choose one of the test cases and press the Start Test button which will make an API request to the Geoloqal API and retrieve the latitude and longitude and displayed on the map.
 
 8)	When you click on the GeoTargeting button it retrieves all the triggers. By selecting one trigger we can check out the trigger matching for a latitude and longitude.
+
