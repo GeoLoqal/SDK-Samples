@@ -1,0 +1,337 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0393636016C2128100A49BB4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393635F16C2128100A49BB4 /* UIKit.framework */; };
+		0393636216C2128100A49BB4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393636116C2128100A49BB4 /* Foundation.framework */; };
+		0393636416C2128100A49BB4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393636316C2128100A49BB4 /* CoreGraphics.framework */; };
+		0393636A16C2128100A49BB4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0393636816C2128100A49BB4 /* InfoPlist.strings */; };
+		0393636C16C2128100A49BB4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0393636B16C2128100A49BB4 /* main.m */; };
+		0393637016C2128100A49BB4 /* GeoLoqalDemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0393636F16C2128100A49BB4 /* GeoLoqalDemoAppDelegate.m */; };
+		0393637316C2128100A49BB4 /* GeoLoqalDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0393637216C2128100A49BB4 /* GeoLoqalDemoViewController.m */; };
+		0393637616C2128200A49BB4 /* GeoLoqalDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0393637416C2128200A49BB4 /* GeoLoqalDemoViewController.xib */; };
+		0393638316C2133E00A49BB4 /* geoloqal_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0393638016C2133E00A49BB4 /* geoloqal_icon.png */; };
+		0393638416C2133E00A49BB4 /* geoloqallogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0393638116C2133E00A49BB4 /* geoloqallogo.png */; };
+		0393638516C2133E00A49BB4 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 0393638216C2133E00A49BB4 /* default.png */; };
+		0393638A16C2139700A49BB4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393638616C2139700A49BB4 /* CoreLocation.framework */; };
+		0393638B16C2139700A49BB4 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393638716C2139700A49BB4 /* MapKit.framework */; };
+		0393638C16C2139700A49BB4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393638816C2139700A49BB4 /* QuartzCore.framework */; };
+		0393638D16C2139700A49BB4 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0393638916C2139700A49BB4 /* SystemConfiguration.framework */; };
+		03A6B4E616D50CB9008B82AC /* libGeoLoqal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A6B4E516D50CB9008B82AC /* libGeoLoqal.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0393635B16C2128100A49BB4 /* GeoLoqalDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoLoqalDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0393635F16C2128100A49BB4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		0393636116C2128100A49BB4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		0393636316C2128100A49BB4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0393636716C2128100A49BB4 /* GeoLoqalDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GeoLoqalDemo-Info.plist"; sourceTree = "<group>"; };
+		0393636916C2128100A49BB4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0393636B16C2128100A49BB4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0393636D16C2128100A49BB4 /* GeoLoqalDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GeoLoqalDemo-Prefix.pch"; sourceTree = "<group>"; };
+		0393636E16C2128100A49BB4 /* GeoLoqalDemoAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoLoqalDemoAppDelegate.h; sourceTree = "<group>"; };
+		0393636F16C2128100A49BB4 /* GeoLoqalDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLoqalDemoAppDelegate.m; sourceTree = "<group>"; };
+		0393637116C2128100A49BB4 /* GeoLoqalDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeoLoqalDemoViewController.h; sourceTree = "<group>"; };
+		0393637216C2128100A49BB4 /* GeoLoqalDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeoLoqalDemoViewController.m; sourceTree = "<group>"; };
+		0393637516C2128200A49BB4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/GeoLoqalDemoViewController.xib; sourceTree = "<group>"; };
+		0393638016C2133E00A49BB4 /* geoloqal_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqal_icon.png; sourceTree = "<group>"; };
+		0393638116C2133E00A49BB4 /* geoloqallogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = geoloqallogo.png; sourceTree = "<group>"; };
+		0393638216C2133E00A49BB4 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
+		0393638616C2139700A49BB4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		0393638716C2139700A49BB4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		0393638816C2139700A49BB4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0393638916C2139700A49BB4 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		03A6B4D816D4FA6E008B82AC /* GLLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLLocationManager.h; sourceTree = "<group>"; };
+		03A6B4E516D50CB9008B82AC /* libGeoLoqal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGeoLoqal.a; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0393635816C2128100A49BB4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0393638A16C2139700A49BB4 /* CoreLocation.framework in Frameworks */,
+				0393638B16C2139700A49BB4 /* MapKit.framework in Frameworks */,
+				0393638C16C2139700A49BB4 /* QuartzCore.framework in Frameworks */,
+				0393638D16C2139700A49BB4 /* SystemConfiguration.framework in Frameworks */,
+				0393636416C2128100A49BB4 /* CoreGraphics.framework in Frameworks */,
+				0393636016C2128100A49BB4 /* UIKit.framework in Frameworks */,
+				0393636216C2128100A49BB4 /* Foundation.framework in Frameworks */,
+				03A6B4E616D50CB9008B82AC /* libGeoLoqal.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0393635016C2128100A49BB4 = {
+			isa = PBXGroup;
+			children = (
+				0393636516C2128100A49BB4 /* GeoLoqalDemo */,
+				0393635E16C2128100A49BB4 /* Frameworks */,
+				0393635C16C2128100A49BB4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0393635C16C2128100A49BB4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0393635B16C2128100A49BB4 /* GeoLoqalDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0393635E16C2128100A49BB4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0393638616C2139700A49BB4 /* CoreLocation.framework */,
+				0393638716C2139700A49BB4 /* MapKit.framework */,
+				0393638816C2139700A49BB4 /* QuartzCore.framework */,
+				0393638916C2139700A49BB4 /* SystemConfiguration.framework */,
+				0393635F16C2128100A49BB4 /* UIKit.framework */,
+				0393636116C2128100A49BB4 /* Foundation.framework */,
+				0393636316C2128100A49BB4 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0393636516C2128100A49BB4 /* GeoLoqalDemo */ = {
+			isa = PBXGroup;
+			children = (
+				0393638016C2133E00A49BB4 /* geoloqal_icon.png */,
+				0393638116C2133E00A49BB4 /* geoloqallogo.png */,
+				0393638216C2133E00A49BB4 /* default.png */,
+				0393637C16C212C700A49BB4 /* GeoLoqal SDK */,
+				0393636E16C2128100A49BB4 /* GeoLoqalDemoAppDelegate.h */,
+				0393636F16C2128100A49BB4 /* GeoLoqalDemoAppDelegate.m */,
+				0393637116C2128100A49BB4 /* GeoLoqalDemoViewController.h */,
+				0393637216C2128100A49BB4 /* GeoLoqalDemoViewController.m */,
+				0393637416C2128200A49BB4 /* GeoLoqalDemoViewController.xib */,
+				0393636616C2128100A49BB4 /* Supporting Files */,
+			);
+			path = GeoLoqalDemo;
+			sourceTree = "<group>";
+		};
+		0393636616C2128100A49BB4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0393636716C2128100A49BB4 /* GeoLoqalDemo-Info.plist */,
+				0393636816C2128100A49BB4 /* InfoPlist.strings */,
+				0393636B16C2128100A49BB4 /* main.m */,
+				0393636D16C2128100A49BB4 /* GeoLoqalDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0393637C16C212C700A49BB4 /* GeoLoqal SDK */ = {
+			isa = PBXGroup;
+			children = (
+				03A6B4E516D50CB9008B82AC /* libGeoLoqal.a */,
+				03A6B4D816D4FA6E008B82AC /* GLLocationManager.h */,
+			);
+			name = "GeoLoqal SDK";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0393635A16C2128100A49BB4 /* GeoLoqalDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0393637916C2128200A49BB4 /* Build configuration list for PBXNativeTarget "GeoLoqalDemo" */;
+			buildPhases = (
+				0393635716C2128100A49BB4 /* Sources */,
+				0393635816C2128100A49BB4 /* Frameworks */,
+				0393635916C2128100A49BB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GeoLoqalDemo;
+			productName = GeoLoqalDemo;
+			productReference = 0393635B16C2128100A49BB4 /* GeoLoqalDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0393635216C2128100A49BB4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Cobi Systems";
+			};
+			buildConfigurationList = 0393635516C2128100A49BB4 /* Build configuration list for PBXProject "GeoLoqalDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 0393635016C2128100A49BB4;
+			productRefGroup = 0393635C16C2128100A49BB4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0393635A16C2128100A49BB4 /* GeoLoqalDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0393635916C2128100A49BB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0393636A16C2128100A49BB4 /* InfoPlist.strings in Resources */,
+				0393637616C2128200A49BB4 /* GeoLoqalDemoViewController.xib in Resources */,
+				0393638316C2133E00A49BB4 /* geoloqal_icon.png in Resources */,
+				0393638416C2133E00A49BB4 /* geoloqallogo.png in Resources */,
+				0393638516C2133E00A49BB4 /* default.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0393635716C2128100A49BB4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0393636C16C2128100A49BB4 /* main.m in Sources */,
+				0393637016C2128100A49BB4 /* GeoLoqalDemoAppDelegate.m in Sources */,
+				0393637316C2128100A49BB4 /* GeoLoqalDemoViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0393636816C2128100A49BB4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0393636916C2128100A49BB4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0393637416C2128200A49BB4 /* GeoLoqalDemoViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0393637516C2128200A49BB4 /* en */,
+			);
+			name = GeoLoqalDemoViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0393637716C2128200A49BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		0393637816C2128200A49BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0393637A16C2128200A49BB4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GeoLoqalDemo/GeoLoqalDemo-Prefix.pch";
+				INFOPLIST_FILE = "GeoLoqalDemo/GeoLoqalDemo-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/GeoLoqalDemo\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-gvodfexgoinkgvbhmxqyvkpullgh/Build/Products/Release-iphonesimulator\"",
+				);
+				OTHER_LDFLAGS = "-licucore";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		0393637B16C2128200A49BB4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GeoLoqalDemo/GeoLoqalDemo-Prefix.pch";
+				INFOPLIST_FILE = "GeoLoqalDemo/GeoLoqalDemo-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/GeoLoqalDemo\"",
+					"\"/Users/cobisystems/Library/Developer/Xcode/DerivedData/GeoLoqal-gvodfexgoinkgvbhmxqyvkpullgh/Build/Products/Release-iphonesimulator\"",
+				);
+				OTHER_LDFLAGS = "-licucore";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0393635516C2128100A49BB4 /* Build configuration list for PBXProject "GeoLoqalDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0393637716C2128200A49BB4 /* Debug */,
+				0393637816C2128200A49BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0393637916C2128200A49BB4 /* Build configuration list for PBXNativeTarget "GeoLoqalDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0393637A16C2128200A49BB4 /* Debug */,
+				0393637B16C2128200A49BB4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0393635216C2128100A49BB4 /* Project object */;
+}
